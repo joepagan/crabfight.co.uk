@@ -141,6 +141,23 @@
 .crab-arm-unified {
   animation: crabArmSway 3.5s ease-in-out infinite;
   transform-origin: 0px 0px; /* Approximate connection point to body */
+  transition: transform 0.3s ease;
+}
+
+/* Enhanced crab hover effects */
+.crab-arm-unified {
+  transform-origin: left center;
+}
+
+/* GSAP Text Animation Enhancements */
+.crab-text, .fight-text {
+  display: inline-block;
+  transform-origin: center;
+}
+
+/* Smooth transitions for SVG hover */
+svg {
+  transition: transform 0.2s ease;
 }
 
 /* 3D Transform Utilities for Card Flip Animation */

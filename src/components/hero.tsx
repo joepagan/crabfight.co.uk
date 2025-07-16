@@ -1,13 +1,188 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
+import { useEffect, useRef } from "react"
+import { gsap } from "gsap"
+import { ScrollTrigger } from "gsap/ScrollTrigger"
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger)
 
 export default function Hero() {
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const crabSvgRef = useRef<SVGSVGElement>(null)
+
+  useEffect(() => {
+    // GSAP text animation for the heading with ScrollTrigger
+    if (headingRef.current) {
+      const crabSpan = headingRef.current.querySelector('.crab-text')
+      const fightSpan = headingRef.current.querySelector('.fight-text')
+      
+      if (crabSpan && fightSpan) {
+        // Initial state - letters scattered and invisible
+        gsap.set(crabSpan, { opacity: 0, x: -100, rotation: -45 })
+        gsap.set(fightSpan, { opacity: 0, x: 100, rotation: 45 })
+        
+        // Create timeline with ScrollTrigger
+        const tl = gsap.timeline({
+          scrollTrigger: {
+            trigger: headingRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse"
+          }
+        })
+        
+        // Animate letters flying in and assembling
+        tl.to(crabSpan, { 
+          duration: 1.2, 
+          opacity: 1, 
+          x: 0, 
+          rotation: 0, 
+          ease: "back.out(1.7)"
+        })
+        .to(fightSpan, { 
+          duration: 1.2, 
+          opacity: 1, 
+          x: 0, 
+          rotation: 0, 
+          ease: "back.out(1.7)" 
+        }, "-=0.8")
+        .to([crabSpan, fightSpan], {
+          duration: 0.3,
+          scale: 1.05,
+          ease: "power2.out"
+        })
+        .to([crabSpan, fightSpan], {
+          duration: 0.3,
+          scale: 1,
+          ease: "power2.out"
+        })
+      }
+    }
+
+    // Cleanup ScrollTrigger on unmount
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+    }
+  }, [])
+
+  const handleCrabHover = () => {
+    if (crabSvgRef.current) {
+      // Target the crab arm elements specifically
+      const crabArms = crabSvgRef.current.querySelectorAll('.crab-arm-unified')
+      console.log('Found crab arms:', crabArms.length)
+      console.log('Crab arms found:', crabArms)
+      
+      if (crabArms.length > 0) {
+        // Create a dramatic "swipe at you" animation
+        const tl = gsap.timeline()
+        
+        // Stop the CSS sway animation temporarily
+        crabArms.forEach(arm => {
+          (arm as SVGElement).style.animationPlayState = 'paused'
+        })
+        
+        // Crab arm swipes forward aggressively (toward viewer)
+        tl.to(crabArms, {
+          scaleX: 1.3,           // Stretch forward
+          scaleY: 1.1,           // Slightly bigger
+          x: 40,                 // Move forward
+          y: -20,                // Slight upward motion
+          rotation: 20,          // Aggressive angle
+          transformOrigin: "left center",
+          duration: 0.15,
+          ease: "power4.out"
+        })
+        // Quick aggressive jab motion
+        .to(crabArms, {
+          x: 80,                 // Further forward lunge
+          y: -10,
+          rotation: 35,
+          duration: 0.1,
+          ease: "power2.out"
+        })
+        // Pause for dramatic effect
+        .to(crabArms, {
+          duration: 0.1
+        })
+        // Pull back with elastic snap
+        .to(crabArms, {
+          scaleX: 1,
+          scaleY: 1,
+          x: 0,
+          y: 0,
+          rotation: 0,
+          duration: 0.5,
+          ease: "elastic.out(1, 0.3)",
+          onComplete: () => {
+            // Resume the sway animation
+            crabArms.forEach(arm => {
+              (arm as SVGElement).style.animationPlayState = 'running'
+            })
+          }
+        })
+      } else {
+        // Enhanced fallback with more aggressive motion
+        gsap.to(crabSvgRef.current, {
+          scaleX: 1.1,
+          x: 20,
+          rotation: 8,
+          duration: 0.15,
+          ease: "power2.out"
+        })
+        .then(() => {
+          gsap.to(crabSvgRef.current, {
+            scaleX: 1,
+            x: 0,
+            rotation: 0,
+            duration: 0.4,
+            ease: "elastic.out(1, 0.5)"
+          })
+        })
+      }
+    }
+  }
+
+  const handleCrabLeave = () => {
+    if (crabSvgRef.current) {
+      const crabArms = crabSvgRef.current.querySelectorAll('.crab-arm-unified, g.crab-arm-unified, [class*="crab-arm"]')
+      
+      // Kill any ongoing animations and reset
+      gsap.killTweensOf(crabArms)
+      gsap.killTweensOf(crabSvgRef.current)
+      
+      gsap.to(crabArms, {
+        x: 0,
+        rotation: 0,
+        duration: 0.3,
+        ease: "power2.out"
+      })
+      
+      gsap.to(crabSvgRef.current, {
+        rotation: 0,
+        duration: 0.3,
+        ease: "power2.out"
+      })
+      
+      // Resume sway animation
+      crabArms.forEach(arm => {
+        (arm as SVGElement).style.animationPlayState = 'running'
+      })
+    }
+  }
   return (
     <section className="relative min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 py-16 text-center">
         <div className="max-w-4xl mx-auto">
           {/* Vector Crab SVG */}
-          <div className="mb-8 flex justify-center w-[600px] h-[600px] relative justify-self-center">
+          <div 
+            className="mb-8 flex justify-center w-[600px] h-[600px] relative justify-self-center cursor-pointer transition-transform hover:scale-105"
+            onMouseEnter={handleCrabHover}
+            onMouseLeave={handleCrabLeave}
+          >
             <svg
+              ref={crabSvgRef}
               version="1.1"
               id="svg1"
               width="666.66669"
@@ -758,9 +933,9 @@ export default function Hero() {
           </div>
 
           {/* Band Name */}
-          <h1 className="text-6xl md:text-8xl font-bold mb-4 text-foreground font-heading">
-            <span className="text-primary">CRAB</span>
-            <span className="text-accent">FIGHT</span>
+          <h1 ref={headingRef} className="text-6xl md:text-8xl font-bold mb-4 text-foreground font-heading">
+            <span className="text-primary crab-text">CRAB</span>
+            <span className="text-accent fight-text">FIGHT</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 font-medium">
