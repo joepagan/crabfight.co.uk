@@ -769,29 +769,27 @@ export default function Hero() {
 
           {/* Contact Info */}
           <div className="flex flex-col md:flex-row gap-6 justify-center items-center mb-8">
-            <div className="flex items-center gap-2 text-foreground">
-              <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-              </svg>
-              <span className="text-lg">+44 7XXX XXX XXX</span>
-            </div>
             
             <div className="flex items-center gap-2 text-foreground">
               <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
-              <span className="text-lg">booking@crabfight.co.uk</span>
+              <a className="text-lg hover:underline" href="mailto:info@crabfight.co.uk">info@crabfight.co.uk</a>
             </div>
           </div>
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="text-lg px-8 py-6">
-              Book Us Now
-            </Button>
-            <Button variant="outline" size="lg" className="text-lg px-8 py-6">
-              Listen to Our Music
-            </Button>
+            <a href="mailto:info@crabfight.co.uk?subject=Booking Request">
+              <Button size="lg" className="text-lg px-8 py-6 cursor-pointer">
+                Book Us Now
+              </Button>
+            </a>
+            <a href="#music-video" className="">
+              <Button variant="outline" size="lg" className="text-lg px-8 py-6 cursor-pointer">
+                Listen to Our Music
+              </Button>
+            </a>
           </div>
         </div>
       </div>

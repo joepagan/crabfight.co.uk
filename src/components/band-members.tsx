@@ -62,7 +62,7 @@ export default function BandMembers() {
             Meet the <span className="text-primary">Crew</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Six crustacean rockers from the depths, ready to shell out some serious metal
+            A six piece Rap Rock band from Leeds, UK. Like chillis with synths. But kinda unique.
           </p>
         </div>
 
