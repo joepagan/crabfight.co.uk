@@ -62,7 +62,7 @@ export default function BandMembers() {
             Meet the <span className="text-primary">Crew</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            A six piece Rap Rock band from Leeds, UK. Like chillis with synths. But kinda unique.
+            A six piece rap rock band from Leeds, UK. Sounds a bit like chillis with synths. But also kinda unique.
           </p>
         </div>
 

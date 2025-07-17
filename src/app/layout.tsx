@@ -19,8 +19,8 @@ const tradeWinds = Trade_Winds({
 });
 
 export const metadata: Metadata = {
-  title: "CrabFight - Heavy Metal from the Deep",
-  description: "Official website of CrabFight - Six crustacean rockers delivering crushing metal from the depths",
+  title: "CrabFight - A rap rock band from Leeds, UK",
+  description: "A six piece rap rock band from Leeds, UK. Sounds a bit like chillis with synths. But also kinda unique.",
 };
 
 export default function RootLayout({
