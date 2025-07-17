@@ -8,7 +8,7 @@ const bandMembers = [
     name: "Rinder",
     instrument: "Lead Guitar",
     favoriteCrab: "King Crab",
-    image: "/rinder-crabman.png",
+    image: "rinder-crabman.png",
     initials: "MR"
   },
   {
@@ -16,7 +16,7 @@ const bandMembers = [
     name: "Jim Bob Gnarley",
     instrument: "Vox",
     favoriteCrab: "Blue Crab",
-    image: "/jim-crabman.png",
+    image: "jim-crabman.png",
     initials: "JBG"
   },
   {
