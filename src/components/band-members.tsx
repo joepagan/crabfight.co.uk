@@ -24,7 +24,7 @@ const bandMembers = [
     name: "Joe",
     instrument: "Vox",
     favoriteCrab: "Dungeness Crab",
-    image: "/joe-crabman.png",
+    image: "joe-crabman.png",
     initials: "JP"
   },
   {
@@ -32,7 +32,7 @@ const bandMembers = [
     name: "Liam",
     instrument: "Drums",
     favoriteCrab: "Hermit Crab",
-    image: "/liam-crabman.png",
+    image: "liam-crabman.png",
     initials: "LS"
   },
   {
@@ -40,7 +40,7 @@ const bandMembers = [
     name: "Sam",
     instrument: "Bass",
     favoriteCrab: "Fiddler Crab",
-    image: "/sam-crabman.png",
+    image: "sam-crabman.png",
     initials: "ST"
   },
   {
@@ -48,7 +48,7 @@ const bandMembers = [
     name: "Hickey",
     instrument: "Keys",
     favoriteCrab: "Rock Crab",
-    image: "/hickey-crabman.png",
+    image: "hickey-crabman.png",
     initials: "MH"
   }
 ]
