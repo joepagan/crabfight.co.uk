@@ -141,7 +141,6 @@ export default function Hero() {
       if (joint) {
         const containerRect = crabContainerRef.current!.getBoundingClientRect()
         const jointRect = joint.getBoundingClientRect()
-        const armRect = element.getBoundingClientRect()
         
         // Use consistent transform origin with the hover setup
         const transformOrigin = "left center"
@@ -239,7 +238,7 @@ export default function Hero() {
         swipeInterval.current = setInterval(performSwipeAnimation, 2000)
       } else {
         // Enhanced fallback with cursor following
-        const { x: cursorX, y: cursorY } = mousePosition.current
+        const { x: cursorX } = mousePosition.current
         gsap.to(crabSvgRef.current, {
           scaleX: 1.1,
           x: 20 + (cursorX / 20),
