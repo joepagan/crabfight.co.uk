@@ -1067,8 +1067,8 @@ export default function Hero() {
 
           {/* Band Name */}
           <h1 ref={headingRef} className="text-6xl md:text-8xl font-bold mb-4 text-foreground font-heading">
-            <span className="text-primary crab-text">CRAB</span>
-            <span className="text-accent fight-text">FIGHT</span>
+            <span className="text-primary crab-text">Crab</span>
+            <span className="text-accent fight-text">Fight</span>
           </h1>
           
           <p className="text-xl md:text-2xl text-muted-foreground mb-8 font-medium">

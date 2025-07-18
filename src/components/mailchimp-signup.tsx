@@ -12,8 +12,7 @@ export default function MailchimpSignup() {
               id="mc-embedded-subscribe-form" 
               name="mc-embedded-subscribe-form" 
               className="validate" 
-              target="_self" 
-              noValidate
+              target="_self"
             >
               <div id="mc_embed_signup_scroll" className="space-y-6">
                 <div className="text-center">
