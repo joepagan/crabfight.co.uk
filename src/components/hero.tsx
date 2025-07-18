@@ -11,6 +11,10 @@ gsap.registerPlugin(ScrollTrigger)
 export default function Hero() {
   const headingRef = useRef<HTMLHeadingElement>(null)
   const crabSvgRef = useRef<SVGSVGElement>(null)
+  const crabContainerRef = useRef<HTMLDivElement>(null)
+  const mousePosition = useRef({ x: 0, y: 0 })
+  const swipeInterval = useRef<NodeJS.Timeout | null>(null)
+  const isHovering = useRef(false)
 
   useEffect(() => {
     // GSAP text animation for the heading with ScrollTrigger
@@ -64,78 +68,190 @@ export default function Hero() {
     // Cleanup ScrollTrigger on unmount
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill())
+      if (swipeInterval.current) {
+        clearInterval(swipeInterval.current)
+      }
     }
   }, [])
 
+  const handleCrabMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (crabContainerRef.current && crabSvgRef.current) {
+      const rect = crabContainerRef.current.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      
+      // Calculate cursor position relative to crab center
+      const relativeX = e.clientX - centerX
+      const relativeY = e.clientY - centerY
+      
+      mousePosition.current = { x: relativeX, y: relativeY }
+      
+      // Update claw positions to follow cursor (subtle tracking only)
+      const crabArms = crabContainerRef.current.querySelectorAll('.crab-arm-unified')
+      
+      crabArms.forEach(arm => {
+        const element = arm as HTMLElement
+        // Ensure CSS animations are disabled during hover
+        element.style.animation = 'none'
+        element.style.transition = 'none'
+        
+        // Find the joint (path53) within this arm to set transform origin
+        const joint = element.querySelector('#path53')
+        
+        if (joint) {
+          // Calculate angle towards cursor from joint position
+          const angle = Math.atan2(relativeY, relativeX) * (180 / Math.PI)
+          
+          // Limit the movement range - joint can only move 10px max
+          const maxJointTranslation = 10
+          const maxRotation = 15
+          
+          // Scale based on distance from center
+          const distance = Math.sqrt(relativeX * relativeX + relativeY * relativeY)
+          const normalizedDistance = Math.min(distance / 300, 1)
+          
+          const rotationAmount = (angle / 180) * maxRotation * normalizedDistance
+          const jointTranslateX = (relativeX / 300) * maxJointTranslation * normalizedDistance
+          const jointTranslateY = (relativeY / 300) * maxJointTranslation * normalizedDistance
+          
+          gsap.to(element, {
+            rotation: rotationAmount,
+            x: jointTranslateX,
+            y: jointTranslateY,
+            transformOrigin: "left center",
+            duration: 0.3,
+            ease: "power2.out",
+            overwrite: true
+          })
+        }
+      })
+    }
+  }
+
+  const performSwipeAnimation = () => {
+    if (!crabContainerRef.current || !isHovering.current) return
+    
+    const crabArms = crabContainerRef.current.querySelectorAll('.crab-arm-unified')
+    const { x: cursorX, y: cursorY } = mousePosition.current
+    
+    crabArms.forEach(arm => {
+      const element = arm as HTMLElement
+      const joint = element.querySelector('#path53')
+      
+      if (joint) {
+        const containerRect = crabContainerRef.current!.getBoundingClientRect()
+        const jointRect = joint.getBoundingClientRect()
+        const armRect = element.getBoundingClientRect()
+        
+        // Use consistent transform origin with the hover setup
+        const transformOrigin = "left center"
+        
+        // Joint position relative to container (for world coordinates)
+        const jointWorldX = jointRect.left - containerRect.left + jointRect.width / 2
+        const jointWorldY = jointRect.top - containerRect.top + jointRect.height / 2
+        
+        // Cursor position relative to container center
+        const containerCenterX = containerRect.width / 2
+        const containerCenterY = containerRect.height / 2
+        const targetX = containerCenterX + cursorX
+        const targetY = containerCenterY + cursorY
+        
+        // Calculate angles for positioning claw tip above and below cursor
+        const dx = targetX - jointWorldX
+        const dy = targetY - jointWorldY
+        const distanceToTarget = Math.sqrt(dx * dx + dy * dy)
+        
+        // Start position: claw tip above cursor
+        const startAngle = Math.atan2(dy - 40, dx) * (180 / Math.PI) // 40px above cursor
+        
+        // End position: claw tip below cursor  
+        const endAngle = Math.atan2(dy + 30, dx) * (180 / Math.PI) // 30px below cursor
+        
+        // Calculate joint translations to help reach the target
+        const startJointX = (dx / distanceToTarget) * 8 // Small joint movement toward target
+        const startJointY = (dy / distanceToTarget) * 8 - 12 // Lift joint slightly
+        
+        const endJointX = (dx / distanceToTarget) * 10
+        const endJointY = (dy / distanceToTarget) * 10 + 8 // Push joint down for strike
+        
+        // Aggressive swipe animation: above cursor → strike below cursor
+        // Knife will automatically follow since it's part of the same group!
+        gsap.timeline()
+          .to(element, {
+            rotation: startAngle,
+            x: startJointX,
+            y: startJointY,
+            transformOrigin: transformOrigin,
+            duration: 0.1,
+            ease: "power2.out"
+          })
+          .to(element, {
+            rotation: endAngle,
+            x: endJointX,
+            y: endJointY,
+            duration: 0.2,
+            ease: "power4.out"
+          })
+          .to(element, {
+            rotation: endAngle * 0.3,
+            x: endJointX * 0.3,
+            y: endJointY * 0.3,
+            duration: 0.5,
+            ease: "elastic.out(1, 0.4)"
+          })
+      }
+    })
+  }
+
   const handleCrabHover = () => {
-    if (crabSvgRef.current) {
+    if (crabContainerRef.current) {
+      isHovering.current = true
+      
       // Target the crab arm elements specifically
-      const crabArms = crabSvgRef.current.querySelectorAll('.crab-arm-unified')
+      const crabArms = crabContainerRef.current.querySelectorAll('.crab-arm-unified')
       console.log('Found crab arms:', crabArms.length)
       console.log('Crab arms found:', crabArms)
       
-      if (crabArms.length > 0) {
-        // Create a dramatic "swipe at you" animation
-        const tl = gsap.timeline()
-        
-        // Stop the CSS sway animation temporarily
+      if (crabArms.length > 0) {        
+        // Disable CSS animations and set up joint-based transform origins
         crabArms.forEach(arm => {
-          (arm as SVGElement).style.animationPlayState = 'paused'
-        })
-        
-        // Crab arm swipes forward aggressively (toward viewer)
-        tl.to(crabArms, {
-          scaleX: 1.3,           // Stretch forward
-          scaleY: 1.1,           // Slightly bigger
-          x: 40,                 // Move forward
-          y: -20,                // Slight upward motion
-          rotation: 20,          // Aggressive angle
-          transformOrigin: "left center",
-          duration: 0.15,
-          ease: "power4.out"
-        })
-        // Quick aggressive jab motion
-        .to(crabArms, {
-          x: 80,                 // Further forward lunge
-          y: -10,
-          rotation: 35,
-          duration: 0.1,
-          ease: "power2.out"
-        })
-        // Pause for dramatic effect
-        .to(crabArms, {
-          duration: 0.1
-        })
-        // Pull back with elastic snap
-        .to(crabArms, {
-          scaleX: 1,
-          scaleY: 1,
-          x: 0,
-          y: 0,
-          rotation: 0,
-          duration: 0.5,
-          ease: "elastic.out(1, 0.3)",
-          onComplete: () => {
-            // Resume the sway animation
-            crabArms.forEach(arm => {
-              (arm as SVGElement).style.animationPlayState = 'running'
+          const element = arm as HTMLElement
+          element.style.animation = 'none'
+          element.style.transition = 'none'
+          
+          // Find joint and set transform origin to shoulder joint
+          const joint = element.querySelector('#path53')
+          if (joint) {
+            // Use a more precise transform origin for the shoulder joint
+            gsap.set(element, { 
+              transformOrigin: "left center"  // This keeps the shoulder in the right position
             })
           }
         })
+        
+        // Perform initial swipe
+        performSwipeAnimation()
+        
+        // Set up periodic swipe interval (every 2 seconds)
+        if (swipeInterval.current) {
+          clearInterval(swipeInterval.current)
+        }
+        swipeInterval.current = setInterval(performSwipeAnimation, 2000)
       } else {
-        // Enhanced fallback with more aggressive motion
+        // Enhanced fallback with cursor following
+        const { x: cursorX, y: cursorY } = mousePosition.current
         gsap.to(crabSvgRef.current, {
           scaleX: 1.1,
-          x: 20,
-          rotation: 8,
+          x: 20 + (cursorX / 20),
+          rotation: 8 + (cursorX / 50),
           duration: 0.15,
           ease: "power2.out"
         })
         .then(() => {
           gsap.to(crabSvgRef.current, {
             scaleX: 1,
-            x: 0,
-            rotation: 0,
+            x: cursorX / 30,
+            rotation: cursorX / 100,
             duration: 0.4,
             ease: "elastic.out(1, 0.5)"
           })
@@ -145,30 +261,47 @@ export default function Hero() {
   }
 
   const handleCrabLeave = () => {
-    if (crabSvgRef.current) {
-      const crabArms = crabSvgRef.current.querySelectorAll('.crab-arm-unified, g.crab-arm-unified, [class*="crab-arm"]')
+    isHovering.current = false
+    
+    // Clear the swipe interval
+    if (swipeInterval.current) {
+      clearInterval(swipeInterval.current)
+      swipeInterval.current = null
+    }
+    
+    if (crabContainerRef.current) {
+      const crabArms = crabContainerRef.current.querySelectorAll('.crab-arm-unified')
       
       // Kill any ongoing animations and reset
       gsap.killTweensOf(crabArms)
       gsap.killTweensOf(crabSvgRef.current)
       
-      gsap.to(crabArms, {
-        x: 0,
-        rotation: 0,
-        duration: 0.3,
-        ease: "power2.out"
-      })
-      
-      gsap.to(crabSvgRef.current, {
-        rotation: 0,
-        duration: 0.3,
-        ease: "power2.out"
-      })
-      
-      // Resume sway animation
       crabArms.forEach(arm => {
-        (arm as SVGElement).style.animationPlayState = 'running'
+        const element = arm as HTMLElement
+        
+        // Reset to neutral position (knife will automatically follow)
+        gsap.to(element, {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          duration: 0.4,
+          ease: "power2.out",
+          onComplete: () => {
+            // Resume CSS sway animation
+            element.style.animation = 'crabArmSway 3.5s ease-in-out infinite'
+            element.style.transition = 'transform 0.3s ease'
+          }
+        })
       })
+      
+      // Reset main SVG if needed
+      if (crabSvgRef.current) {
+        gsap.to(crabSvgRef.current, {
+          rotation: 0,
+          duration: 0.3,
+          ease: "power2.out"
+        })
+      }
     }
   }
   return (
@@ -177,9 +310,11 @@ export default function Hero() {
         <div className="max-w-4xl mx-auto">
           {/* Vector Crab SVG */}
           <div 
+            ref={crabContainerRef}
             className="mb-8 flex justify-center w-[600px] h-[600px] relative justify-self-center cursor-pointer transition-transform hover:scale-105"
             onMouseEnter={handleCrabHover}
             onMouseLeave={handleCrabLeave}
+            onMouseMove={handleCrabMouseMove}
           >
             <svg
               ref={crabSvgRef}
@@ -712,13 +847,28 @@ export default function Hero() {
                     d="m 3294.31,2934.91 c -3.52,3.56 -8.52,6.45 -13.39,7.61 -2.19,0.52 -4.45,0.72 -6.68,0.94 -0.49,0.05 -0.99,0.06 -1.48,0.03 -2.2,-0.14 -4.42,-0.38 -6.56,-0.9 -0.23,-0.05 -0.45,-0.13 -0.68,-0.2 -0.84,-0.29 -2.24,-0.94 -2.58,-1.09 -0.58,-0.24 -1.81,-0.69 -2.64,-1.11 -3.59,-1.84 -6.8,-5.25 -8.86,-8.67 -0.05,-0.08 -0.09,-0.15 -0.13,-0.23 -0.69,-1.24 -1.61,-3.63 -2.1,-4.96 -0.08,-0.22 -0.16,-0.43 -0.22,-0.66 -0.02,-0.1 -0.03,-0.19 -0.05,-0.29 -0.11,-0.52 -0.21,-1.24 -0.32,-1.93 -0.6,-0.86 -1.18,-1.73 -1.62,-2.66 -2.35,-5.02 -2.83,-6.91 -3.34,-12.54 -0.24,-2.67 0.33,-5.5 0.89,-8.05 0.11,-0.48 0.26,-0.92 0.44,-1.38 0.66,-1.74 1.38,-3.56 2.22,-5.23 0.12,-0.24 0.26,-0.48 0.41,-0.71 2.54,-3.8 4.93,-6.46 8.88,-8.84 0.19,-0.11 0.38,-0.2 0.58,-0.3 1.26,-0.62 3.61,-1.62 4.93,-2.08 0.1,-0.04 0.2,-0.08 0.31,-0.11 0.22,-0.07 0.44,-0.11 0.66,-0.16 1.09,-0.22 4.36,-0.73 5.49,-0.74 0.95,-0.13 1.89,-0.02 2.83,0.33 2.66,0.12 5.14,0.92 7.44,2.38 1.33,0.71 2.64,1.49 3.91,2.32 2.62,1.73 5.13,3.67 7.52,5.71 1.13,0.96 2.17,2.02 3.1,3.18 1.33,1.64 3.03,3.66 4.21,5.6 1.22,2.01 2.08,4.48 2.92,6.54 0.25,0.61 0.46,1.23 0.6,1.87 0.09,0.36 0.14,0.73 0.2,1.09 0.3,2.05 0.7,4.13 0.78,6.2 0.3,7.06 -2.75,14.06 -7.67,19.04"
                     style={{fill: '#8f2a2f', fillOpacity: 1, fillRule: 'nonzero', stroke: 'none'}}
                     transform="matrix(0.13333333,0,0,-0.13333333,0,666.66667)" />
+                  
+                  {/* Knife held by claw - positioned at the tip of path55 */}
+                  <g id="svg1" className="crab-knife">
+                    {/* Knife blade - positioned at claw tip */}
+                    <path
+                      id="knife-blade"
+                      d="m 1740,1400 l -200,600 l 60,20 l 200,-600 z"
+                      style={{fill: '#c0c0c0', fillOpacity: 1, fillRule: 'nonzero', stroke: '#808080', strokeWidth: 4}}
+                      transform="matrix(0.13333333,0,0,-0.13333333,0,666.66667)" />
+                    {/* Knife handle - at the grip point */}
+                    <path
+                      id="knife-handle"
+                      d="m 1740,1400 l -60,180 l 40,10 l 60,-180 z"
+                      style={{fill: '#8B4513', fillOpacity: 1, fillRule: 'nonzero', stroke: '#654321', strokeWidth: 3}}
+                      transform="matrix(0.13333333,0,0,-0.13333333,0,666.66667)" />
+                  </g>
                 </g>
               </g>
             </svg>
 
             <svg
               version="1.1"
-              id="svg1"
               width="250"
               height="250"
               viewBox="0 0 5333.3335 5333.3335"

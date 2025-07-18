@@ -6,7 +6,7 @@ const bandMembers = [
   {
     id: 1,
     name: "Rinder",
-    instrument: "Lead Guitar",
+    instrument: "Guitar",
     favoriteCrab: "King Crab",
     image: "rinder-crabman.png",
     initials: "MR"
