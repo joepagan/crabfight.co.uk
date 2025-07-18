@@ -7,8 +7,8 @@ interface YouTubeEmbedProps {
 }
 
 export default function YouTubeEmbed({ 
-  videoId, 
-  title = "CrabFight Music Video", 
+  videoId: _videoId, 
+  title: _title = "CrabFight Music Video", 
   className = "" 
 }: YouTubeEmbedProps) {
   return (
@@ -20,7 +20,7 @@ export default function YouTubeEmbed({
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
             {/* Experience the crushing power of CrabFight&apos;s signature sound */}
-            We're working on new stuff, stay tuned!
+            We&apos;re working on new stuff, stay tuned!
           </p>
         </div>
 
