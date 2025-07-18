@@ -19,11 +19,12 @@ export default function YouTubeEmbed({
             Latest <span className="text-primary">Tracks</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Experience the crushing power of CrabFight&apos;s signature sound
+            {/* Experience the crushing power of CrabFight&apos;s signature sound */}
+            We're working on new stuff, stay tuned!
           </p>
         </div>
 
-        <div className="max-w-4xl mx-auto">
+        {/* <div className="max-w-4xl mx-auto">
           <div className="relative aspect-video rounded-lg overflow-hidden shadow-2xl border-4 border-primary/20 hover:border-primary/50 transition-colors group">
             <iframe
               src={`https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&showinfo=0`}
@@ -33,7 +34,6 @@ export default function YouTubeEmbed({
               className="absolute inset-0 w-full h-full"
             />
             
-            {/* Decorative Crab Icons */}
             <div className="absolute -top-2 -left-2 w-8 h-8 bg-primary rounded-full opacity-80 group-hover:opacity-100 transition-opacity">
               <svg className="w-full h-full p-1 text-white" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C13.1 2 14 2.9 14 4C14 5.1 13.1 6 12 6C10.9 6 10 5.1 10 4C10 2.9 10.9 2 12 2Z"/>
@@ -53,7 +53,7 @@ export default function YouTubeEmbed({
               Subscribe to our channel for more music from the murky depths!
             </p>
           </div>
-        </div>
+        </div> */}
       </div>
     </section>
   )
