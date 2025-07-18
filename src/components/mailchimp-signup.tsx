@@ -17,8 +17,8 @@ export default function MailchimpSignup() {
             >
               <div id="mc_embed_signup_scroll" className="space-y-6">
                 <div className="text-center">
-                  <h2 className="text-3xl md:text-4xl font-bold text-foreground font-heading mb-2">
-                    JOIN THE <span className="text-primary">FIGHT</span>
+                  <h2 className="text-4xl md:text-6xl font-bold mb-4 text-foreground font-heading">
+                    Join The <span className="text-primary">Fight</span>
                   </h2>
                 </div>
                 
