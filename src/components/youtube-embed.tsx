@@ -7,10 +7,8 @@ interface YouTubeEmbedProps {
 }
 
 export default function YouTubeEmbed({ 
-  videoId: _videoId, 
-  title: _title = "CrabFight Music Video", 
   className = "" 
-}: YouTubeEmbedProps) {
+}: Pick<YouTubeEmbedProps, 'className'>) {
   return (
     <section id="music-video" className={`py-20 ${className}`}>
       <div className="container mx-auto px-4">
