@@ -5,11 +5,11 @@ import MailchimpSignup from "@/components/mailchimp-signup"
 
 export default function Home() {
   return (
-    <main className="dark min-h-screen bg-background text-foreground">
+    <main className="dark min-h-screen bg-background text-foreground ">
       <Hero />
       <MailchimpSignup />
-      <BandMembers />
-      <YouTubeEmbed />
+      {/* <BandMembers /> */}
+      {/* <YouTubeEmbed /> */}
       </main>
   )
 }

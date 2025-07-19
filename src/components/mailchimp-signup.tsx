@@ -5,7 +5,14 @@ export default function MailchimpSignup() {
     <section id="newsletter" className="py-20 bg-muted/50">
       <div className="container mx-auto px-4">
         <div id="mc_embed_shell">
-          <div id="mc_embed_signup" className="max-w-md mx-auto">
+          <div id="mc_embed_signup" className="max-w-xl mx-auto">
+
+          <div className="text-center mb-8">
+            <h2 className="text-4xl md:text-6xl font-bold mb-4 text-foreground font-heading">
+              Join The <span className="text-primary">Campaign</span>
+            </h2>
+          </div>
+
             <form 
               action="https://crabfight.us5.list-manage.com/subscribe/post?u=88ff09011cb83ac647a094902&amp;id=b24fef60c8&amp;f_id=0075bcedf0" 
               method="post" 
@@ -14,12 +21,7 @@ export default function MailchimpSignup() {
               className="validate" 
               target="_self"
             >
-              <div id="mc_embed_signup_scroll" className="space-y-6">
-                <div className="text-center">
-                  <h2 className="text-4xl md:text-6xl font-bold mb-4 text-foreground font-heading">
-                    Join The <span className="text-primary">Fight</span>
-                  </h2>
-                </div>
+              <div id="mc_embed_signup_scroll" className="space-y-6 max-w-md mx-auto">
                 
                 <div className="mc-field-group">
                   <label 

@@ -305,10 +305,10 @@ export default function Hero() {
   }
   return (
     <section className="relative flex items-center justify-center bg-gradient-to-br from-background via-background to-muted">
-      <div className="container mx-auto px-4 pb-16 text-center">
+      <div className="container mx-auto px-4 py-16 text-center">
         <div className="max-w-4xl mx-auto flex justify-center flex-col items-center">
           {/* Vector Crab SVG */}
-          <div 
+          {/* <div 
             ref={crabContainerRef}
             className="mb-8 flex justify-center w-[600px] h-[600px] relative justify-self-center cursor-pointer transition-transform hover:scale-105"
             onMouseEnter={handleCrabHover}
@@ -576,7 +576,6 @@ export default function Hero() {
                     d="m 2038.14,2596.14 c -66.45,26.59 -115.19,44.31 -137.34,0 -22.15,-44.3 84.18,-26.58 44.3,-97.46 -39.87,-70.89 -35.44,-106.34 39.88,-119.63 75.32,-13.29 244.18,29.26 246.14,96.6 1.96,67.33 -192.98,120.49 -192.98,120.49"
                     style={{fill: '#a72521', fillOpacity: 1, fillRule: 'nonzero', stroke: 'none'}}
                     transform="matrix(0.13333333,0,0,-0.13333333,0,666.66667)" />
-                  {/* Animated Crab Arm - Unified Group Animation */}
                   <g className="crab-arm-unified">
                     <path
                       id="path53"
@@ -1063,9 +1062,8 @@ export default function Hero() {
               </g>
             </svg>
 
-          </div>
+          </div> */}
 
-          {/* Band Name */}
           <h1 ref={headingRef} className="text-6xl md:text-8xl font-bold mb-4 text-foreground font-heading">
             <span className="text-primary crab-text">Crab</span>
             <span className="text-accent fight-text">Fight</span>
@@ -1075,7 +1073,6 @@ export default function Hero() {
             From the murky depths
           </p>
 
-          {/* Contact Info */}
           <div className="flex flex-col md:flex-row gap-6 justify-center items-center mb-8">
             
             <div className="flex items-center gap-2 text-foreground">
@@ -1086,7 +1083,6 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="mailto:info@crabfight.co.uk?subject=Booking Request">
               <Button size="lg" className="text-lg px-8 py-6 cursor-pointer">
