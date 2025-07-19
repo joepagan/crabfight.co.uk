@@ -1,5 +1,7 @@
 "use client"
 
+import Image from "next/image"
+
 export default function MailchimpSignup() {
   return (
     <section id="newsletter" className="py-20 bg-muted/50">
@@ -67,11 +69,13 @@ export default function MailchimpSignup() {
                         className="inline-block"
                       >
                         <span className="inline-block bg-transparent rounded border border-border/20 hover:border-border/40 transition-colors">
-                          <img 
+                          <Image 
                             className="refferal_badge" 
                             src="https://digitalasset.intuit.com/render/content/dam/intuit/mc-fe/en_us/images/intuit-mc-rewards-text-dark.svg" 
                             alt="Intuit Mailchimp" 
-                            style={{width: '220px', height: '40px', display: 'flex', padding: '2px 0px', justifyContent: 'center', alignItems: 'center'}}
+                            width={220}
+                            height={40}
+                            style={{display: 'flex', padding: '2px 0px', justifyContent: 'center', alignItems: 'center'}}
                           />
                         </span>
                       </a>
