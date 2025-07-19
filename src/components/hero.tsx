@@ -306,7 +306,7 @@ export default function Hero() {
   return (
     <section className="relative flex items-center justify-center bg-gradient-to-br from-background via-background to-muted">
       <div className="container mx-auto px-4 pb-16 text-center">
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto flex justify-center flex-col items-center">
           {/* Vector Crab SVG */}
           <div 
             ref={crabContainerRef}
