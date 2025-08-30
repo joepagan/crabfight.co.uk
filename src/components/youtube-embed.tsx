@@ -17,7 +17,7 @@ export default function YouTubeEmbed({
             Latest <span className="text-primary">Tracks</span>
           </h2>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            {/* Experience the crushing power of CrabFight&apos;s signature sound */}
+            {/* Experience the crushing power of Crab Fight&apos;s signature sound */}
             We&apos;re working on new stuff, stay tuned!
           </p>
         </div>

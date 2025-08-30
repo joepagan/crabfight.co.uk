@@ -20,7 +20,7 @@ const tradeWinds = Trade_Winds({
 });
 
 export const metadata: Metadata = {
-  title: "CrabFight - A rap rock band from Leeds, UK",
+  title: "Crab Fight - A rap rock band from Leeds, UK",
   description: "A six piece rap rock band from Leeds, UK. Sounds a bit like chillis with synths. But also kinda unique.",
 };
 

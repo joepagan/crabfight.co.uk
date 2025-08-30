@@ -836,6 +836,7 @@ export default function Hero() {
 
           <h1 ref={headingRef} className="text-6xl md:text-8xl font-bold mb-4 text-foreground font-heading">
             <span className="text-primary crab-text">Crab</span>
+            &nbsp;
             <span className="text-accent fight-text">Fight</span>
           </h1>
           
