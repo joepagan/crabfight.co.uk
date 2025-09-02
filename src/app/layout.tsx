@@ -33,7 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <GoogleTagManager gtmId="GTM-5KCSGFZN" />
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${tradeWinds.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${tradeWinds.variable} antialiased bg-gradient-to-br from-background via-background to-muted`}
       >
         {children}
       </body>

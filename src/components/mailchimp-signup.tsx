@@ -4,7 +4,7 @@ import Image from "next/image"
 
 export default function MailchimpSignup() {
   return (
-    <section id="newsletter" className="py-20 bg-muted/50">
+    <section id="newsletter" className="py-20">
       <div className="container mx-auto px-4">
         <div id="mc_embed_shell">
           <div id="mc_embed_signup" className="max-w-xl mx-auto">
